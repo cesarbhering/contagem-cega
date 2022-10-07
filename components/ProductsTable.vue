@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table height="750" :data="actualStockValues" border style="width: 100%">
+    <el-table id="productstable" height="750" :data="actualStockValues" border style="width: 100%">
       <el-table-column
         v-for="column in displayColunmns"
         :key="column"
@@ -8,7 +8,7 @@
         :label="column"
         :width="260"
       />
-      <el-table-column label="SALDO ATUAL INFORMADO" width="180">
+      <el-table-column label="SALDO ATUAL INFORMADO" width="180" :fixed="right">
         <template slot-scope="scope">
           <el-input-number
             v-model="traineeInsertedValues[scope.$index]"
@@ -31,6 +31,7 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'ProductsTable',
 
