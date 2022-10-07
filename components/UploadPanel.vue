@@ -1,6 +1,7 @@
 <template>
   <div
     class="container"
+    v-if="!computado"
   >
     <el-upload
       ref="upload"
@@ -37,7 +38,8 @@ export default {
   data () {
     return {
       data: [],
-      correctStockValues: []
+      correctStockValues: [],
+      computado: false
     }
   },
 
@@ -69,6 +71,7 @@ export default {
         this.setCorrectStockValues(this.correctStockValues)
         this.setActualStockValues(this.data)
         this.$refs.upload.submit()
+        this.computado = true
       }
 
       reader.readAsText(file)
