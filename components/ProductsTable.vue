@@ -8,7 +8,7 @@
         :label="column"
         :width="260"
       />
-      <el-table-column label="SALDO ATUAL INFORMADO" width="180" :fixed="right">
+      <el-table-column label="SALDO INFORMADO" width="180" :fixed="right">
         <template slot-scope="scope">
           <el-input-number
             v-model="traineeInsertedValues[scope.$index]"
