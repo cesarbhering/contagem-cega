@@ -1,11 +1,13 @@
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
-  displayColunmns: ['COD', 'DENOMINACAO', 'COMPLEM', 'UN', 'SALDO ATUAL'],
+  displayColunmns: ['COD', 'DENOMINACAO', 'COMPLEM', 'UN'],
 
   actualStockValues: [],
 
-  correctStockValues: [{}]
+  correctStockValues: [{}],
+
+  traineeCountValues: []
 })
 
 export const getters = {
@@ -19,6 +21,9 @@ export const mutations = {
   },
   SET_CORRECT_STOCK_VALUES (state, payload) {
     state.correctStockValues = payload
+  },
+  SET_TRAINEE_COUNT_VALUES (state, payload) {
+    state.traineeCountValues = payload
   }
 }
 
@@ -29,5 +34,9 @@ export const actions = {
 
   setCorrectStockValues ({ commit }, payload) {
     commit('SET_CORRECT_STOCK_VALUES', payload)
+  },
+
+  setTraineeInsertedValues ({ commit }, payload) {
+    commit('SET_TRAINEE_COUNT_VALUES', payload)
   }
 }

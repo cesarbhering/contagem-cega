@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-button type="primary">
+    <!--  <el-button type="primary">
       Enviar Contagem
-    </el-button>
+    </el-button> -->
   </div>
 </template>
 

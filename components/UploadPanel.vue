@@ -36,14 +36,15 @@ export default {
 
   data () {
     return {
-      data: []
+      data: [],
+      correctStockValues: []
     }
   },
 
   methods: {
 
     ...mapActions('products', [
-      'setActualStockValues'
+      'setActualStockValues', 'setCorrectStockValues'
     ]),
 
     submitUpload () {
@@ -62,8 +63,10 @@ export default {
               UN: line.substring(53, 57).trim(),
               'SALDO ATUAL': line.substring(117, 127).trim()
             })
+            this.correctStockValues.push(parseInt(line.substring(117, 127).trim()))
           }
         })
+        this.setCorrectStockValues(this.correctStockValues)
         this.setActualStockValues(this.data)
         this.$refs.upload.submit()
       }
