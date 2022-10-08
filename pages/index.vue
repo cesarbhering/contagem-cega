@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <UploadPanel />
-    <ProductsTable />
+    <UserDashboard />
     <PageFooter />
   </div>
 </template>

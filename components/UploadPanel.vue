@@ -1,7 +1,7 @@
 <template>
   <div
-    class="container"
     v-if="!computado"
+    class="container"
   >
     <el-upload
       ref="upload"
@@ -37,8 +37,8 @@ export default {
 
   data () {
     return {
-      data: [],
-      correctStockValues: [],
+      constructTableValues: [],
+      supervisorInformedCount: [],
       computado: false
     }
   },
@@ -46,7 +46,7 @@ export default {
   methods: {
 
     ...mapActions('products', [
-      'setActualStockValues', 'setCorrectStockValues'
+      'setTableValues', 'setSupervisorCount'
     ]),
 
     submitUpload () {
@@ -58,18 +58,18 @@ export default {
         const lines = text.split('\n')
         lines.forEach((line) => {
           if (line.trim().match(/^\d/)) {
-            this.data.push({
+            this.constructTableValues.push({
               COD: line.substring(0, 11).trim(),
               DENOMINACAO: line.substring(11, 42).trim(),
               COMPLEM: line.substring(42, 53).trim(),
               UN: line.substring(53, 57).trim(),
               'SALDO ATUAL': line.substring(117, 127).trim()
             })
-            this.correctStockValues.push(parseInt(line.substring(117, 127).trim()))
+            this.supervisorInformedCount.push(parseInt(line.substring(117, 127).trim()))
           }
         })
-        this.setCorrectStockValues(this.correctStockValues)
-        this.setActualStockValues(this.data)
+        this.setTableValues(this.constructTableValues)
+        this.setSupervisorCount(this.supervisorInformedCount)
         this.$refs.upload.submit()
         this.computado = true
       }

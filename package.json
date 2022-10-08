@@ -17,6 +17,7 @@
     "element-ui": "^2.15.10",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
+    "vue-html2pdf": "^1.8.0",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuex-map-fields": "^1.4.1"
