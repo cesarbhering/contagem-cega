@@ -7,7 +7,9 @@ export const state = () => ({
 
   supervisorCount: [],
 
-  traineeCount: []
+  traineeCount: [],
+
+  traineePersonalInfo: {}
 })
 
 export const getters = {
@@ -28,6 +30,10 @@ export const mutations = {
 
   UPDATE_TRAINEE_COUNT (state, payload) {
     state.traineeCount[payload.index] = payload.value
+  },
+
+  SET_TRAINEE_PERSONAL_INFO (state, payload) {
+    state.traineePersonalInfo = payload
   }
 }
 
@@ -46,6 +52,10 @@ export const actions = {
 
   updateTraineeCount ({ commit }, payload) {
     commit('UPDATE_TRAINEE_COUNT', payload)
+  },
+
+  setTraineePersonalInfo ({ commit }, payload) {
+    commit('SET_TRAINEE_PERSONAL_INFO', payload)
   }
 
 }

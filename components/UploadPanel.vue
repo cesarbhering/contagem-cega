@@ -3,6 +3,17 @@
     v-if="!computado"
     class="container"
   >
+    <div>
+      <!--  ver isso depois
+ --><!--       <el-form :model="form" class="demo-ruleForm">
+        <el-form-item label="Nome" prop="name">
+          <el-input v-model="trainee.nome" />
+        </el-form-item>
+        <el-form-item label="ID" prop="email">
+          <el-input v-model.number="trainee.id" />
+        </el-form-item>
+      </el-form> -->
+    </div>
     <el-upload
       ref="upload"
       class="upload-demo"
@@ -33,10 +44,14 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'TutorialTeste',
+  name: 'UploadPanel',
 
   data () {
     return {
+      trainee: {
+        name: '',
+        id: ''
+      },
       constructTableValues: [],
       supervisorInformedCount: [],
       computado: false
@@ -46,7 +61,7 @@ export default {
   methods: {
 
     ...mapActions('products', [
-      'setTableValues', 'setSupervisorCount'
+      'setTableValues', 'setSupervisorCount', 'setTraineePersonalInfo'
     ]),
 
     submitUpload () {
@@ -70,7 +85,9 @@ export default {
         })
         this.setTableValues(this.constructTableValues)
         this.setSupervisorCount(this.supervisorInformedCount)
+        this.setTraineePersonalInfo(this.trainee)
         this.$refs.upload.submit()
+
         this.computado = true
       }
 
