@@ -34,6 +34,10 @@ export const mutations = {
 
   SET_TRAINEE_PERSONAL_INFO (state, payload) {
     state.traineePersonalInfo = payload
+  },
+
+  UPDATE_TRAINEE_END_COUNT_TIMESTAMP (state, payload) {
+    state.traineePersonalInfo.endCountTimestamp = payload
   }
 }
 
@@ -56,6 +60,10 @@ export const actions = {
 
   setTraineePersonalInfo ({ commit }, payload) {
     commit('SET_TRAINEE_PERSONAL_INFO', payload)
+  },
+
+  updateTraineeEndCountTimeStamp ({ commit }, payload) {
+    commit('UPDATE_TRAINEE_END_COUNT_TIMESTAMP', payload)
   }
 
 }

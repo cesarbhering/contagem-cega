@@ -6,7 +6,7 @@
         :key="column"
         :prop="column"
         :label="column"
-        :width="column === 'COD' || column === 'UN' ? 100 : 280"
+        :width="column === 'DENOMINACAO' ? 280 : 120"
       />
       <el-table-column label="SALDO INFORMADO" width="210">
         <template slot-scope="scope">

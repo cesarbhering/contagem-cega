@@ -4,15 +4,36 @@
     class="container"
   >
     <div>
-      <!--  ver isso depois
- --><!--       <el-form :model="form" class="demo-ruleForm">
-        <el-form-item label="Nome" prop="name">
-          <el-input v-model="trainee.nome" />
+      <!-- A EL-FORM THAT ASKS FOR NAME AND ID -->
+      <el-form
+        ref="form"
+        :model="trainee"
+        label-width="120px"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          label="Nome"
+          prop="name"
+          :rules="[
+            { required: true, message: 'Por favor, insira seu nome', trigger: 'blur' }
+          ]"
+        >
+          <el-input v-model="trainee.name" />
         </el-form-item>
-        <el-form-item label="ID" prop="email">
-          <el-input v-model.number="trainee.id" />
+        <el-form-item
+          label="ID"
+          prop="id"
+          :rules="[
+            { required: true, message: 'Por favor, insira seu ID', trigger: 'blur' }
+          ]"
+        >
+          <el-input v-model="trainee.id" />
         </el-form-item>
-      </el-form> -->
+<!--         <el-form-item>
+          <el-button type="primary" @click="handleSubmit('form')">Enviar</el-button>
+        </el-form-item> -->
+      </el-form>
+
     </div>
     <el-upload
       ref="upload"
@@ -50,7 +71,8 @@ export default {
     return {
       trainee: {
         name: '',
-        id: ''
+        id: '',
+        countStartTimestamp: ''
       },
       constructTableValues: [],
       supervisorInformedCount: [],
@@ -85,6 +107,7 @@ export default {
         })
         this.setTableValues(this.constructTableValues)
         this.setSupervisorCount(this.supervisorInformedCount)
+        this.trainee.countStartTimestamp = new Date().getTime()
         this.setTraineePersonalInfo(this.trainee)
         this.$refs.upload.submit()
 

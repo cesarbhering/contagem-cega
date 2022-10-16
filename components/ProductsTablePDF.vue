@@ -53,7 +53,7 @@ export default {
       this.updateTraineeCount({ index, value })
     },
     tableRowClassName ({ row, rowIndex }) {
-      if (rowIndex % 19 === 0 && rowIndex !== 0) {
+      if ((rowIndex % 19 === 0 && rowIndex !== 0 && rowIndex !== 19) || rowIndex === 18) {
         return 'html2pdf__page-break'
       }
     }
