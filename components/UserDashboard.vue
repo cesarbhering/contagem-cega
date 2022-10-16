@@ -103,6 +103,9 @@ export default {
       for (let i = 0; i < rows.length; i++) {
         rows[i].classList.add(this.rowClassName(i))
       }
+      debugger
+      this.$root.$emit('formatPDF')
+      this.$emit('formatPDF')
       this.computado = true
     },
 
@@ -148,7 +151,7 @@ export default {
 // https://stackoverflow.com/questions/71465593/exporting-bootstrap-table-to-excel-or-pdf/71623881#71623881
 </script>
 
-<style>
+<style scoped>
 .container {
   width: 100%;
   display: flex;
@@ -156,20 +159,8 @@ export default {
   align-items: center;
 }
 
-.warning-row {
-    background-color: #c4344e !important;
-    color: #4e0817;
-    font-weight: bold;
-
-  }
-
-.success-row {
-    background-color: #82f4b1 !important;
-    color: #108149;
-    font-weight: bold;
- }
-
 .el-button {
   margin-top: 20px;
 }
+
 </style>

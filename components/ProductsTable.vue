@@ -62,9 +62,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 #productstable {
   width: 100%;
 }
+
+.warning-row {
+    background-color: #c4344e !important;
+    color: #4e0817;
+    font-weight: bold;
+
+  }
+
+.success-row {
+    background-color: #82f4b1 !important;
+    color: #108149;
+    font-weight: bold;
+ }
 
 </style>

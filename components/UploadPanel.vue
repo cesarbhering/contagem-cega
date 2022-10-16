@@ -29,11 +29,10 @@
         >
           <el-input v-model="trainee.id" />
         </el-form-item>
-<!--         <el-form-item>
+        <!--         <el-form-item>
           <el-button type="primary" @click="handleSubmit('form')">Enviar</el-button>
         </el-form-item> -->
       </el-form>
-
     </div>
     <el-upload
       ref="upload"
