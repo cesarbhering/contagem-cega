@@ -103,9 +103,6 @@ export default {
       for (let i = 0; i < rows.length; i++) {
         rows[i].classList.add(this.rowClassName(i))
       }
-      debugger
-      this.$root.$emit('formatPDF')
-      this.$emit('formatPDF')
       this.computado = true
     },
 
@@ -126,6 +123,7 @@ export default {
     },
 
     async beforeDownload ({ html2pdf, options, pdfContent }) {
+      this.$root.$emit('formatPDF')
       await html2pdf().set(options).from(pdfContent).toPdf().get('pdf').then((pdf) => {
         const totalPages = pdf.internal.getNumberOfPages()
         // const dateDiff = this.traineePersonalInfo.endCountTimeStamp - this.traineePersonalInfo.startCountTimeStamp

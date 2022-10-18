@@ -21,14 +21,14 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import { mapActions } from 'vuex'
-import { nextTick } from 'vue'
+
 export default {
-  name: 'ProductsTable',
+  name: 'ProductsTablePDF',
 
   data () {
     return {
-      traineeCount2: []
+      traineeCountPDF: [],
+      isCountCorrect: []
     }
   },
 
@@ -37,29 +37,23 @@ export default {
   },
 
   mounted () {
-    this.$root.$on('formatPDF', () => this.formataRows())
+    this.$root.$on('formatPDF', () => { this.compareValues(); this.formataRows() })
   },
 
   beforeUpdate () {
-    this.traineeCount2 = Array(this.tableValues.length).fill(0)
-    nextTick(() => {
-      const cloneTraineeCount = structuredClone(this.traineeCount2)
-      this.setTraineeCount(cloneTraineeCount)
-    })
+    this.traineeCountPDF = Array(this.tableValues.length).fill(0)
   },
 
   methods: {
-    ...mapActions('products', [
-      'setTraineeCount', 'updateTraineeCount'
-    ]),
-
     handleTraineeCountChange (index, value) {
       this.updateTraineeCount({ index, value })
     },
+
     tableRowClassName ({ row, rowIndex }) {
       if ((rowIndex % 19 === 0 && rowIndex !== 0 && rowIndex !== 19) || rowIndex === 18) {
-        return 'html2pdf__page-break'
+        return 'html2pdf__page-break PDFtableRow'
       }
+      return 'PDFtableRow'
     },
 
     rowClassName (rowIndex) {
@@ -71,10 +65,10 @@ export default {
     },
 
     formataRows () {
-      debugger
-      const rows = document.getElementsByClassName('el-table__row')
-      console.log(rows)
-      debugger
+      const rows = document.getElementsByClassName('PDFtableRow')
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].classList.add(this.rowClassName(i))
+      }
     },
 
     compareValues () {

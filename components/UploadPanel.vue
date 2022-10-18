@@ -118,7 +118,7 @@ export default {
 
     handleExceed (files, fileList) {
       this.$message.warning(
-        'Only 1 file can be uploaded at a time'
+        'APenas 1 arquivo pode ser utilizado como gabarito, você pode excluir o arquivo inicialmente selecionado e selecionar outro'
       )
     }
   }
