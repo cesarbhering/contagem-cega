@@ -7,11 +7,9 @@
         :show-layout="false"
         :enable-download="false"
         :preview-modal="false"
-        :paginate-elements-by-height="1400"
         :manual-pagination="true"
-        pdf-content-width="800px"
-        margin="20"
-        :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `hehehe.pdf`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
+
+        :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `contagem-cega-testes.pdf`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
         @beforeDownload="beforeDownload($event)"
       >
         <section slot="pdf-content">
@@ -130,11 +128,12 @@ export default {
         for (let i = 1; i <= totalPages; i++) {
           pdf.setPage(i)
           // insert PDF text containing trainne name, date of initial count, date of end of count, and the diference in hours and minutes
-          pdf.text(`Nome do funcionário: ${this.traineePersonalInfo.name}`, 0.2, 0.3)
-          pdf.text(`Início da contagem: ${new Date(this.traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.5)
-          pdf.text(`Fim da contagem: ${new Date(this.traineePersonalInfo.endCountTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.7)
+          pdf.text(`Nome do funcionário: ${this.traineePersonalInfo.name}`, 0.2, 0.2)
+          pdf.text(`Total de acertos: ${this.acertos} - Total de produtos: ${this.acertos + this.erros}`, 0.2, 0.4)
+          pdf.text(`Início da contagem: ${new Date(this.traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.6)
+          pdf.text(`Fim da contagem: ${new Date(this.traineePersonalInfo.endCountTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.8)
           // pdf.text(`Tempo decorrido: ${dateDiff}`, 0.2, 0.9)
-          pdf.text('Página ' + i + ' de ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.68), (pdf.internal.pageSize.getHeight() - 0.3))
+          pdf.text('Página ' + i + ' de ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.80), (pdf.internal.pageSize.getHeight() - 0.2))
         }
       }).save()
     }

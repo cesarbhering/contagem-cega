@@ -8,10 +8,17 @@
         :label="column"
         :width="column === 'COD' || column === 'UN' || column === 'COMPLEM'? 100 : 280"
       />
-      <el-table-column label="SALDO INFORMADO" width="170">
+      <el-table-column label="SALDO INFORMADO" width="100">
         <template slot-scope="scope">
           <span>
             {{ traineeCount[scope.$index] }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="SALDO SISTEMA" width="100">
+        <template slot-scope="scope">
+          <span>
+            {{ supervisorCount[scope.$index] }}
           </span>
         </template>
       </el-table-column>
