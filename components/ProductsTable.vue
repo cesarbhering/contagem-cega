@@ -1,12 +1,26 @@
 <template>
   <div>
-    <el-table id="productstable" :data="tableValues" border height="700">
+    <el-input
+      v-model="search"
+      size="mini"
+      placeholder="Procurar por denominação ou código"
+      class="search-input"
+    />
+    <el-table
+      id="productstable"
+      :data="tableValues.filter(data => !search ||
+        data.DENOMINACAO.toLowerCase().includes(search.toLowerCase()) ||
+        data.COD.toLowerCase().includes(search.toLowerCase()))"
+      border
+      height="700"
+    >
       <el-table-column
         v-for="column in displayColunmns"
         :key="column"
         :prop="column"
         :label="column"
         :width="column === 'DENOMINACAO' ? 280 : 120"
+        align="center"
       />
       <el-table-column label="SALDO INFORMADO" width="210">
         <template slot-scope="scope">
@@ -16,6 +30,7 @@
             :max="999999"
             :step="1"
             :precision="0"
+            align="center"
             @change="handleTraineeCountChange(scope.$index, traineeCount[scope.$index])"
           />
         </template>
@@ -33,7 +48,8 @@ export default {
 
   data () {
     return {
-      traineeCount: []
+      traineeCount: [],
+      search: ''
     }
   },
 
@@ -62,7 +78,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #productstable {
   width: 100%;
 }
@@ -78,6 +94,11 @@ export default {
     background-color: #82f4b1 !important;
     color: #108149;
     font-weight: bold;
+ }
+
+ .search-input {
+    margin-bottom: 10px;
+    width: 230px;
  }
 
 </style>
