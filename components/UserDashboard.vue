@@ -8,7 +8,6 @@
         :enable-download="false"
         :preview-modal="false"
         :manual-pagination="true"
-
         :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `contagem-cega-testes.pdf`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
         @beforeDownload="beforeDownload($event)"
       >
@@ -128,6 +127,9 @@ export default {
         for (let i = 1; i <= totalPages; i++) {
           pdf.setPage(i)
           // insert PDF text containing trainne name, date of initial count, date of end of count, and the diference in hours and minutes
+          pdf.setPage(i)
+          pdf.setFontSize(10)
+          pdf.setTextColor(150)
           pdf.text(`Nome do funcionário: ${this.traineePersonalInfo.name}`, 0.2, 0.2)
           pdf.text(`Total de acertos: ${this.acertos} - Total de produtos: ${this.acertos + this.erros}`, 0.2, 0.4)
           pdf.text(`Início da contagem: ${new Date(this.traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.6)
