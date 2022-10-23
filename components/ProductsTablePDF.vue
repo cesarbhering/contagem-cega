@@ -1,21 +1,27 @@
 <template>
   <div>
-    <el-table id="productsTablePDF" :data="tableValues" border :row-class-name="tableRowClassName">
+    <el-table
+      id="productsTablePDF"
+      :data="tableValues"
+      border
+      :row-class-name="tableRowClassName"
+      header-cell-class-name="header-cell-style"
+    >
       <el-table-column
         v-for="column in displayColunmns"
         :key="column"
         :prop="column"
         :label="column"
-        :width="column === 'COD' || column === 'UN' || column === 'COMPLEM'? 100 : 280"
+        :width="columnSize(column)"
       />
-      <el-table-column label="SALDO INFORMADO" width="100">
+      <el-table-column label="SALDO INFORMADO" width="120">
         <template slot-scope="scope">
           <span>
             {{ traineeCount[scope.$index] }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="SALDO SISTEMA" width="100">
+      <el-table-column label="SALDO SISTEMA" width="110">
         <template slot-scope="scope">
           <span>
             {{ supervisorCount[scope.$index] }}
@@ -52,6 +58,20 @@ export default {
   },
 
   methods: {
+    columnSize (column) {
+      if (column === 'COD') {
+        return 80
+      } else if (column === 'DENOMINACAO') {
+        return 285
+      } else if (column === 'UN') {
+        return 60
+      } else if (column === 'COMPLEM') {
+        return 100
+      } else {
+        return 100
+      }
+    },
+
     handleTraineeCountChange (index, value) {
       this.updateTraineeCount({ index, value })
     },
@@ -119,4 +139,14 @@ export default {
     color: #108149;
     font-weight: bold;
  }
+
+.header-cell-style {
+    color: black;
+    font-weight: bold;
+    text-align: center !important;
+    word-break: break-word !important;
+ }
+ .el-table .cell {
+    word-break: break-word;
+}
 </style>

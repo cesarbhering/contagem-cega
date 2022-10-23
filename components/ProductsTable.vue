@@ -1,6 +1,20 @@
 <template>
   <div>
-    <el-table id="productstable" :data="tableValues" border height="700">
+    <el-input
+      v-model="search"
+      size="mini"
+      placeholder="Procurar por denominação ou código"
+      class="search-input"
+    />
+    <el-table
+      id="productstable"
+      :data="tableValues.filter(data => !search ||
+        data.DENOMINACAO.toLowerCase().includes(search.toLowerCase()) ||
+        data.COD.toLowerCase().includes(search.toLowerCase()))"
+      border
+      height="700"
+      align="center"
+    >
       <el-table-column
         v-for="column in displayColunmns"
         :key="column"
@@ -27,13 +41,14 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapActions } from 'vuex'
-import { nextTick } from 'vue'
+
 export default {
   name: 'ProductsTable',
 
   data () {
     return {
-      traineeCount: []
+      traineeCount: [],
+      search: ''
     }
   },
 
@@ -41,12 +56,10 @@ export default {
     ...mapFields('products', ['displayColunmns', 'tableValues'])
   },
 
-  beforeUpdate () {
+  mounted () {
     this.traineeCount = Array(this.tableValues.length).fill(0)
-    nextTick(() => {
-      const cloneTraineeCount = structuredClone(this.traineeCount)
-      this.setTraineeCount(cloneTraineeCount)
-    })
+    const cloneTraineeCount = structuredClone(this.traineeCount)
+    this.setTraineeCount(cloneTraineeCount)
   },
 
   methods: {
@@ -62,7 +75,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #productstable {
   width: 100%;
 }
@@ -78,6 +91,11 @@ export default {
     background-color: #82f4b1 !important;
     color: #108149;
     font-weight: bold;
+ }
+
+.search-input {
+    margin-bottom: 10px;
+    width: 230px;
  }
 
 </style>

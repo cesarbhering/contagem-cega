@@ -1,6 +1,18 @@
 <template>
   <div>
-    <div class="container">
+    <div
+      v-loading="loading"
+      class="container"
+      element-loading-text="Gerando PDF, demora 30 segundos :) "
+    >
+      <div v-if="computado">
+        <h3>
+          {{ traineePersonalInfo.name }} Você acertou {{ acertos }} de {{ erros+acertos }} produtos
+        </h3>
+        <!--         <el-button type="primary" :disabled="!computado" @click="handleResetCount">
+          Refazer Contagem
+        </el-button> -->
+      </div>
       <ProductsTable />
       <vue-html2pdf
         ref="html2Pdf"
@@ -8,8 +20,7 @@
         :enable-download="false"
         :preview-modal="false"
         :manual-pagination="true"
-
-        :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `contagem-cega-testes.pdf`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
+        :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `Contagem Cega - ${traineePersonalInfo.name} - ${new Date(traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
         @beforeDownload="beforeDownload($event)"
       >
         <section slot="pdf-content">
@@ -18,19 +29,17 @@
         </section>
       </vue-html2pdf>
     </div>
-    <div>
-      <el-button type="primary" @click="handleSubmitCount">
-        Enviar Contagem
-      </el-button>
-      <el-button type="primary" @click="handleDownloadPDF">
-        Download PDF
-      </el-button>
-
-      <div v-if="computado" class="container">
-        <h1>
-          {{ traineePersonalInfo.name }}  você acertou {{ acertos }} de {{ erros+acertos }} produtos
-        </h1>
-        <el-button type="primary" :disabled="computado" @click="handleResetCount">
+    <div class="buttons-container">
+      <div v-if="!computado" class="pre-computed-buttons-class">
+        <el-button type="primary" @click="handleSubmitCount">
+          Enviar Contagem
+        </el-button>
+      </div>
+      <div v-if="computado" class="post-computed-buttons-class">
+        <el-button type="primary" @click="handleDownloadPDF">
+          Download PDF
+        </el-button>
+        <el-button v-if="computado" type="warning" @click="$router.push('/')">
           Refazer Contagem
         </el-button>
       </div>
@@ -59,7 +68,8 @@ export default {
       isCountCorrect: [],
       erros: 0,
       acertos: 0,
-      computado: false
+      computado: false,
+      loading: false
     }
   },
 
@@ -67,9 +77,13 @@ export default {
     ...mapFields('products', ['supervisorCount', 'traineeCount', 'traineePersonalInfo'])
   },
 
+  mounted () {
+    this.$emit('changeLoading', false)
+  },
+
   methods: {
     ...mapActions('products', [
-      'setTraineeInsertedValues', 'updateTraineeEndCountTimeStamp'
+      'updateTraineeEndCountTimeStamp'
     ]),
 
     // a function that assigns a new class to a row bases on the reutrn
@@ -105,11 +119,12 @@ export default {
     },
 
     handleDownloadPDF () {
+      this.loading = true
       this.$refs.html2Pdf.downloadPdf()
     },
-
+    /*
     handleResetCount () {
-      this.setTraineeInsertedValues([])
+      this.traineeCount = Array(this.tableValues.length).fill(0)
       this.computado = false
       this.acertos = 0
       this.erros = 0
@@ -118,15 +133,17 @@ export default {
         x[i].classList.remove('success-row')
         x[i].classList.remove('warning-row')
       }
-    },
+    }, */
 
-    async beforeDownload ({ html2pdf, options, pdfContent }) {
+    beforeDownload ({ html2pdf, options, pdfContent }) {
       this.$root.$emit('formatPDF')
-      await html2pdf().set(options).from(pdfContent).toPdf().get('pdf').then((pdf) => {
+      html2pdf().set(options).from(pdfContent).toPdf().get('pdf').then((pdf) => {
         const totalPages = pdf.internal.getNumberOfPages()
         // const dateDiff = this.traineePersonalInfo.endCountTimeStamp - this.traineePersonalInfo.startCountTimeStamp
         for (let i = 1; i <= totalPages; i++) {
           pdf.setPage(i)
+          pdf.setFontSize(10)
+          pdf.setTextColor(150)
           // insert PDF text containing trainne name, date of initial count, date of end of count, and the diference in hours and minutes
           pdf.text(`Nome do funcionário: ${this.traineePersonalInfo.name}`, 0.2, 0.2)
           pdf.text(`Total de acertos: ${this.acertos} - Total de produtos: ${this.acertos + this.erros}`, 0.2, 0.4)
@@ -135,6 +152,7 @@ export default {
           // pdf.text(`Tempo decorrido: ${dateDiff}`, 0.2, 0.9)
           pdf.text('Página ' + i + ' de ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.80), (pdf.internal.pageSize.getHeight() - 0.2))
         }
+        this.loading = false
       }).save()
     }
 
@@ -158,6 +176,19 @@ export default {
 
 .el-button {
   margin-top: 20px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.post-computed-buttons-class {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 </style>

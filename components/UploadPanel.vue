@@ -1,21 +1,24 @@
 <template>
   <div
     v-if="!computado"
-    class="container"
+    v-loading="loading"
+    class="form-container"
+    element-loading-text="Gerando Tabela..."
   >
+    <PageHeader />
     <div>
-      <!-- A EL-FORM THAT ASKS FOR NAME AND ID -->
       <el-form
         ref="form"
         :model="trainee"
         label-width="120px"
-        class="demo-ruleForm"
+        class="form"
+        label-position="top"
       >
         <el-form-item
           label="Nome"
           prop="name"
           :rules="[
-            { required: true, message: 'Por favor, insira seu nome', trigger: 'blur' }
+            { required: true, min: 3 , message: 'Por favor, insira seu nome', trigger: 'blur' }
           ]"
         >
           <el-input v-model="trainee.name" />
@@ -34,29 +37,34 @@
         </el-form-item> -->
       </el-form>
     </div>
-    <el-upload
-      ref="upload"
-      class="upload-demo"
-      action="nada"
-      :auto-upload="false"
-      :limit="1"
-      :on-exceed="handleExceed"
-    >
-      <el-button slot="trigger" size="small" type="primary">
-        Selecionar Gabarito
-      </el-button>
-      <el-button
-        style="margin-left: 10px"
-        size="small"
-        type="success"
-        @click="submitUpload"
+    <div class="upload-buttons">
+      <el-upload
+        ref="upload"
+        action="nada"
+        :auto-upload="false"
+        :limit="1"
+        :on-exceed="handleExceed"
+        :before-upload="beforeTextUpload"
+        :on-success="handleTextUploadSuccess"
+        :on-change="handleOnChange"
       >
-        Gerar Tabela
-      </el-button>
-      <div slot="tip" class="el-upload__tip">
-        Arquivo de texto contendo os dados do estoque
-      </div>
-    </el-upload>
+        <el-button slot="trigger" size="small" type="primary">
+          Selecionar Gabarito
+        </el-button>
+        <el-button
+          style="margin-left: 10px"
+          size="small"
+          type="success"
+          :disabled="disableUpload"
+          @click="submitUpload"
+        >
+          Gerar Tabela
+        </el-button>
+        <div slot="tip" class="el-upload__tip">
+          Arquivo de texto contendo os dados do estoque
+        </div>
+      </el-upload>
+    </div>
   </div>
 </template>
 
@@ -75,17 +83,39 @@ export default {
       },
       constructTableValues: [],
       supervisorInformedCount: [],
-      computado: false
+      computado: false,
+      loading: false,
+      disableUpload: true
     }
   },
 
   methods: {
 
+    handleOnChange (file, fileList) {
+      fileList.length > 0 ? this.disableUpload = false : this.disableUpload = true
+    },
+
     ...mapActions('products', [
       'setTableValues', 'setSupervisorCount', 'setTraineePersonalInfo'
     ]),
 
+    beforeTextUpload (file) {
+      const isText = file.type === 'text/plain'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isText) {
+        this.$message.error('O arquivo deve ser um arquivo de texto')
+        this.$nuxt.refresh()
+      }
+      if (!isLt2M) {
+        this.$message.error('O tamanho do arquivo deve ser menor que 2MB')
+        this.$nuxt.refresh()
+      }
+      return isText && isLt2M
+    },
+
     submitUpload () {
+      this.loading = true
       // takes the uploaded file and creates a span element for every line
       const file = this.$refs.upload.uploadFiles[0].raw
       const reader = new FileReader()
@@ -109,16 +139,20 @@ export default {
         this.trainee.countStartTimestamp = new Date().getTime()
         this.setTraineePersonalInfo(this.trainee)
         this.$refs.upload.submit()
-
+        this.loading = false
         this.computado = true
       }
 
       reader.readAsText(file)
     },
 
+    handleTextUploadSuccess (response, file, fileList) {
+      this.$router.push('/tableView')
+    },
+
     handleExceed (files, fileList) {
       this.$message.warning(
-        'APenas 1 arquivo pode ser utilizado como gabarito, você pode excluir o arquivo inicialmente selecionado e selecionar outro'
+        'Apenas 1 arquivo pode ser utilizado como gabarito, você pode excluir o arquivo inicialmente selecionado e selecionar outro'
       )
     }
   }
@@ -127,8 +161,22 @@ export default {
 
 <style scoped>
 
-.container {
-  width: 350px;
-  text-align: center  ;
+.form-container {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.el-form--label-top .el-form-item__label {
+  padding-bottom: 0 !important;
+}
+
+.upload-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.el-upload__tip {
+  text-align: center;
 }
 </style>
