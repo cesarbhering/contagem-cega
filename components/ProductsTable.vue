@@ -13,7 +13,6 @@
         data.COD.toLowerCase().includes(search.toLowerCase()))"
       border
       height="700"
-      align="center"
     >
       <el-table-column
         v-for="column in displayColunmns"
@@ -21,15 +20,20 @@
         :prop="column"
         :label="column"
         :width="column === 'DENOMINACAO' ? 280 : 120"
+        align="center"
       />
       <el-table-column label="SALDO INFORMADO" width="210">
         <template slot-scope="scope">
-          <el-input-number
+          <el-input
             v-model="traineeCount[scope.$index]"
+            :step-strictly="true"
+            type="number"
+            size="mini"
             :min="0"
             :max="999999"
             :step="1"
             :precision="0"
+            align="center"
             @change="handleTraineeCountChange(scope.$index, traineeCount[scope.$index])"
           />
         </template>
@@ -41,7 +45,7 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapActions } from 'vuex'
-
+import { nextTick } from 'vue'
 export default {
   name: 'ProductsTable',
 
@@ -58,8 +62,10 @@ export default {
 
   mounted () {
     this.traineeCount = Array(this.tableValues.length).fill(0)
-    const cloneTraineeCount = structuredClone(this.traineeCount)
-    this.setTraineeCount(cloneTraineeCount)
+    nextTick(() => {
+      const cloneTraineeCount = structuredClone(this.traineeCount)
+      this.setTraineeCount(cloneTraineeCount)
+    })
   },
 
   methods: {
@@ -93,7 +99,7 @@ export default {
     font-weight: bold;
  }
 
-.search-input {
+ .search-input {
     margin-bottom: 10px;
     width: 230px;
  }
