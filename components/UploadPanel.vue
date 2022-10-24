@@ -39,7 +39,7 @@
     </div>
     <div class="upload-buttons">
       <el-upload
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="#"
         ref="upload"
         :auto-upload="false"
         :limit="1"
@@ -142,6 +142,7 @@ export default {
         this.$refs.upload.submit()
         this.loading = false
         this.computado = true
+        this.$router.push('/tableView')
       }
 
       reader.readAsText(file)
