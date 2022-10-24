@@ -20,7 +20,14 @@
         :enable-download="false"
         :preview-modal="false"
         :manual-pagination="true"
-        :html-to-pdf-options="{ margin: [1.0, 0.2, 0.2, 0.2], filename: `Contagem Cega - ${traineePersonalInfo.name} - ${new Date(traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, image: { type: 'jpeg', quality: 2 }, html2canvas: { scale: 2, letterRendering: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }"
+        :html-to-pdf-options="{
+          margin: [1.0, 0.2, 0.2, 0.2],
+          filename: `Contagem Cega - ${traineePersonalInfo.name} - ${new Date(traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`,
+          image: { type: 'jpeg', quality: 2 },
+          html2canvas: { scale: 2, letterRendering: true },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+          pagebreak: {avoid: 'tr'}
+        }"
         @beforeDownload="beforeDownload($event)"
       >
         <section slot="pdf-content">
@@ -150,7 +157,7 @@ export default {
           pdf.text(`Início da contagem: ${new Date(this.traineePersonalInfo.countStartTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.6)
           pdf.text(`Fim da contagem: ${new Date(this.traineePersonalInfo.endCountTimestamp).toLocaleString('pt-BR')}`, 0.2, 0.8)
           // pdf.text(`Tempo decorrido: ${dateDiff}`, 0.2, 0.9)
-          pdf.text('Página ' + i + ' de ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.80), (pdf.internal.pageSize.getHeight() - 0.2))
+          pdf.text('Página ' + i + ' de ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.80), (pdf.internal.pageSize.getHeight() - 0.25))
         }
         this.loading = false
       }).save()
