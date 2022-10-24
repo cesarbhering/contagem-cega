@@ -40,7 +40,6 @@
     <div class="upload-buttons">
       <el-upload
         ref="upload"
-        action="nada"
         :auto-upload="false"
         :limit="1"
         :on-exceed="handleExceed"
