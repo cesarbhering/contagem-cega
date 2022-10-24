@@ -146,6 +146,7 @@ export default {
     },
 
     handleTextUploadSuccess (response, file, fileList) {
+      console.log('cheguei aqui')
       this.$router.push('/tableView')
     },
 
