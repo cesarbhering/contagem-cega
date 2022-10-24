@@ -114,6 +114,7 @@ export default {
     },
 
     submitUpload () {
+      console.log('cheguei aqui no submit')
       this.loading = true
       // takes the uploaded file and creates a span element for every line
       const file = this.$refs.upload.uploadFiles[0].raw
@@ -143,6 +144,7 @@ export default {
       }
 
       reader.readAsText(file)
+      console.log('cheguei aqui no fim do submit')
     },
 
     handleTextUploadSuccess (response, file, fileList) {
