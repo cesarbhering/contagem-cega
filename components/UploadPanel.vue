@@ -39,6 +39,7 @@
     </div>
     <div class="upload-buttons">
       <el-upload
+      action="https://jsonplaceholder.typicode.com/posts/"
         ref="upload"
         :auto-upload="false"
         :limit="1"
